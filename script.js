@@ -1,6 +1,6 @@
 const btnColours = ["red", "blue", "green", "yellow"];
-const gameChoise = [];
-const userChoise = [];
+let gameChoise = [];
+let userChoise = [];
 let start = false;
 let level = 0;
 
@@ -9,13 +9,14 @@ const playSound = (name) => {
   audio.play();
 };
 
-const startOver = () => {
+const over = () => {
   level = 0;
   gameChoise = [];
   start = false;
 };
 
 const nextSequence = () => {
+  userChoise = [];
   const randomColor = btnColours[Math.floor(Math.random() * 4)];
   level++;
   $("#level-title").text("Level " + level);
@@ -47,6 +48,7 @@ const checkAnswer = (ind) => {
     setTimeout(function () {
       $("body").removeClass("game-over");
     }, 200);
+    over();
   }
 };
 
@@ -60,5 +62,4 @@ $(".btn").click(function () {
   playSound($(this).attr("id"));
   animateBtn($(this).attr("id"));
   checkAnswer(userChoise.length - 1);
-  console.log(userChoise);
 });
