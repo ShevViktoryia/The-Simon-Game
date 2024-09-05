@@ -4,10 +4,7 @@ const userChoise = [];
 
 const nextSequence = () => {
   const randomColor = btnColours[Math.floor(Math.random() * 4)];
-  $("#" + randomColor)
-    .fadeIn(100)
-    .fadeOut(100)
-    .fadeIn(100);
+  $(`#${randomColor}`).fadeIn(100).fadeOut(100).fadeIn(100);
   gameChoise.push(randomColor);
 };
 
@@ -28,9 +25,15 @@ const checkAnswer = () => {
   }
 };
 
+const animateBtn = (btn) => {
+  $(`#${btn}`).addClass("pressed");
+  setTimeout(() => $(`#${btn}`).removeClass("pressed"), 100);
+};
+
 $(".btn").click(function () {
   userChoise.push($(this).attr("id"));
   checkAnswer();
+  animateBtn($(this).attr("id"));
   console.log(userChoise);
 });
 nextSequence();
