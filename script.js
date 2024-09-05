@@ -1,21 +1,46 @@
 const btnColours = ["red", "blue", "green", "yellow"];
 const gameChoise = [];
 const userChoise = [];
+let start = false;
+let level = 0;
+
+const playSound = (name) => {
+  const audio = new Audio("sounds/" + name + ".mp3");
+  audio.play();
+};
+
+const startOver = () => {
+  level = 0;
+  gameChoise = [];
+  start = false;
+};
 
 const nextSequence = () => {
   const randomColor = btnColours[Math.floor(Math.random() * 4)];
+  level++;
+  $("#level-title").text("Level " + level);
   $(`#${randomColor}`).fadeIn(100).fadeOut(100).fadeIn(100);
+  playSound(randomColor);
   gameChoise.push(randomColor);
 };
 
-const checkAnswer = () => {
-  if (gameChoise[gameChoise.length - 1] === userChoise[userChoise.length - 1]) {
+$(document).keypress(function () {
+  if (!start) {
+    $("#level-title").text("Level " + level);
+    nextSequence();
+    start = true;
+  }
+});
+
+const checkAnswer = (ind) => {
+  if (gameChoise[ind] === userChoise[ind]) {
     if (gameChoise.length === userChoise.length) {
       setTimeout(() => {
         nextSequence();
       }, 1000);
     }
   } else {
+    playSound("wrong");
     $("body").addClass("game-over");
     $("#level-title").text("Game Over, Press Any Key to Restart");
 
@@ -32,10 +57,8 @@ const animateBtn = (btn) => {
 
 $(".btn").click(function () {
   userChoise.push($(this).attr("id"));
-  checkAnswer();
+  playSound($(this).attr("id"));
   animateBtn($(this).attr("id"));
+  checkAnswer(userChoise.length - 1);
   console.log(userChoise);
 });
-nextSequence();
-
-console.log(gameChoise);
